@@ -1,3 +1,6 @@
+import asyncio
+import os
+
 from fastapi import FastAPI
 from mangum import Mangum
 
@@ -21,3 +24,8 @@ def read_root():
 
 
 handler = Mangum(app)
+
+if "AWS_EXECUTION_ENV" in os.environ:
+    print("Running in AWS mode")
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(app.router.startup())
